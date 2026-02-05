@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#667eea">
+    <meta name="version" content="1.1.1">
     <title>Creon Medication Tracker</title>
     <style>
         * {
@@ -42,6 +43,45 @@
         .header p {
             font-size: 0.9em;
             opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+            gap: 5px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 10px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-width: 90px;
+            font-size: 15px;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .card {
@@ -210,96 +250,42 @@
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 8px;
-            cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            min-height: 40px;
-        }
-
-        .delete-btn:active {
-            background: #ff5252;
-            transform: scale(0.95);
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #999;
-            padding: 40px 20px;
-            font-size: 16px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 16px 12px;
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            border-radius: 12px;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-            color: white;
-            min-width: 100px;
+            transition: all 0.2s;
             white-space: nowrap;
         }
 
-        .tab.active {
-            background: white;
-            color: #667eea;
-            transform: scale(1.05);
-        }
-
-        .tab:active {
+        .delete-btn:active {
             transform: scale(0.95);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+            background: #ff5252;
         }
 
         .type-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
             background: #667eea;
             color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-right: 8px;
-            display: inline-block;
-            font-weight: 600;
         }
 
         .type-badge.stool {
             background: #764ba2;
         }
 
-        /* Tablet and larger screens */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 16px;
+        }
+
         @media (min-width: 600px) {
-            body {
-                padding: 20px;
-            }
-
-            .header h1 {
-                font-size: 2.5em;
-            }
-
-            .card {
-                padding: 30px;
-            }
-
             .stool-options {
                 grid-template-columns: repeat(4, 1fr);
             }
@@ -308,21 +294,13 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
-        /* Improve touch targets */
-        @media (hover: none) and (pointer: coarse) {
-            input, select, textarea, button {
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>💊 Creon Tracker</h1>
-            <p>Track your medication, meals, and symptoms</p>
-            <p style="font-size: 0.8em; opacity: 0.7; margin-top: 5px;">Version 1.1.0</p>
+            <p>Track medication and digestive health</p>
         </div>
 
         <div class="tabs">
@@ -334,25 +312,26 @@
 
         <div id="log-tab" class="tab-content active">
             <div class="card">
+                <h2 style="margin-bottom: 20px;">Log Creon Dose</h2>
                 <form id="tracking-form">
                     <div class="form-group">
-                        <label for="doses">Number of Creon Doses</label>
-                        <input type="number" id="doses" min="0" max="20" required>
+                        <label for="doses">Number of Creon Doses *</label>
+                        <input type="number" id="doses" min="0" max="20" required placeholder="e.g., 2">
                     </div>
 
                     <div class="form-group">
-                        <label for="time">Time Taken</label>
+                        <label for="time">Time Taken *</label>
                         <input type="time" id="time" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="meal">Meal/Snack</label>
-                        <input type="text" id="meal" placeholder="e.g., Breakfast, Lunch, Snack" required>
+                        <label for="meal">Meal/Snack *</label>
+                        <input type="text" id="meal" required placeholder="e.g., Breakfast, Lunch with pasta">
                     </div>
 
                     <div class="form-group">
-                        <label for="symptoms">Symptoms (if any)</label>
-                        <textarea id="symptoms" placeholder="Describe any symptoms you're experiencing..."></textarea>
+                        <label for="symptoms">Symptoms (Optional)</label>
+                        <textarea id="symptoms" placeholder="e.g., bloating, cramping, nausea, or leave blank if none"></textarea>
                     </div>
 
                     <button type="submit" class="btn">Save Entry</button>
@@ -362,41 +341,56 @@
 
         <div id="stool-tab" class="tab-content">
             <div class="card">
+                <h2 style="margin-bottom: 20px;">Log Stool Movement</h2>
                 <form id="stool-form">
                     <div class="form-group">
-                        <label for="stoolTime">Time</label>
+                        <label for="stoolTime">Time *</label>
                         <input type="time" id="stoolTime" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Stool Quality (Bristol Stool Scale)</label>
+                        <label>Stool Quality (Bristol Stool Scale) *</label>
                         <div class="stool-options">
                             <div class="stool-option-2" data-value="1">
-                                Type 1<br>Hard lumps
+                                <div style="font-size: 20px; margin-bottom: 5px;">●●●</div>
+                                <div>Type 1</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Hard lumps</div>
                             </div>
                             <div class="stool-option-2" data-value="2">
-                                Type 2<br>Lumpy
+                                <div style="font-size: 20px; margin-bottom: 5px;">━━━</div>
+                                <div>Type 2</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Lumpy sausage</div>
                             </div>
                             <div class="stool-option-2" data-value="3">
-                                Type 3<br>Cracked
+                                <div style="font-size: 20px; margin-bottom: 5px;">━━━</div>
+                                <div>Type 3</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Cracked sausage</div>
                             </div>
                             <div class="stool-option-2" data-value="4">
-                                Type 4<br>Smooth
+                                <div style="font-size: 20px; margin-bottom: 5px;">━━━</div>
+                                <div>Type 4</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Smooth (ideal)</div>
                             </div>
                             <div class="stool-option-2" data-value="5">
-                                Type 5<br>Soft blobs
+                                <div style="font-size: 20px; margin-bottom: 5px;">● ● ●</div>
+                                <div>Type 5</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Soft blobs</div>
                             </div>
                             <div class="stool-option-2" data-value="6">
-                                Type 6<br>Mushy
+                                <div style="font-size: 20px; margin-bottom: 5px;">⁓⁓⁓</div>
+                                <div>Type 6</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Mushy</div>
                             </div>
                             <div class="stool-option-2" data-value="7">
-                                Type 7<br>Watery
+                                <div style="font-size: 20px; margin-bottom: 5px;">💧</div>
+                                <div>Type 7</div>
+                                <div style="font-size: 11px; margin-top: 3px; opacity: 0.8;">Liquid</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="stoolNotes">Notes (optional)</label>
+                        <label for="stoolNotes">Notes (Optional)</label>
                         <textarea id="stoolNotes" placeholder="Any additional notes about this bowel movement..."></textarea>
                     </div>
 
@@ -520,13 +514,16 @@
                     </p>
                 </div>
 
-                <div style="margin-top: 30px; padding: 20px; background: #f8f9ff; border-radius: 10px; border-left: 4px solid #667eea;">
-                    <p style="margin: 0 0 10px 0; font-weight: 600; color: #667eea;">Last Export Check: <span id="lastExportCheck">Never</span></p>
-                    <p style="margin: 0; font-size: 14px; color: #666;">Next scheduled export: <span id="nextExport">Not scheduled</span></p>
+                <div style="background: #f8f9ff; border: 2px solid #667eea; border-radius: 10px; padding: 15px; margin-top: 20px;">
+                    <p style="margin: 0; font-size: 14px; color: #666;"><strong>Last Export Check:</strong> <span id="lastExportCheck">Never</span></p>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; color: #666;"><strong>Next Scheduled Export:</strong> <span id="nextExport">Not scheduled</span></p>
                 </div>
 
-                <h3 style="margin-top: 40px; margin-bottom: 15px; color: #667eea;">📧 How to Securely Share Your Data with Your Doctor</h3>
-                
+                <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
+
+                <h3 style="margin-bottom: 15px; color: #667eea;">🔒 How to Securely Share Your Data with Your Doctor</h3>
+                <p style="margin-bottom: 20px; color: #666;">Your tracking data contains sensitive health information. Follow these secure methods to share it with your healthcare provider:</p>
+
                 <div style="background: white; border: 2px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
                     <h4 style="margin: 0 0 15px 0; color: #764ba2;">Option 1: Email (Encrypted)</h4>
                     <div style="padding-left: 20px;">
@@ -617,9 +614,14 @@
             const autoExport = localStorage.getItem('autoExportEnabled') === 'true';
             document.getElementById('autoExportToggle').checked = autoExport;
             
+            // Update modal checkbox
+            document.getElementById('auto-export-enabled').checked = autoExport;
+            
             const lastCheck = localStorage.getItem('lastExportCheck');
             if (lastCheck) {
-                document.getElementById('lastExportCheck').textContent = new Date(lastCheck).toLocaleDateString();
+                const lastCheckDate = new Date(lastCheck).toLocaleDateString();
+                document.getElementById('lastExportCheck').textContent = lastCheckDate;
+                document.getElementById('last-export-date').textContent = lastCheckDate;
             }
             
             updateNextExportDate();
@@ -628,6 +630,7 @@
         // Save auto-export setting
         document.getElementById('autoExportToggle').addEventListener('change', function() {
             localStorage.setItem('autoExportEnabled', this.checked);
+            document.getElementById('auto-export-enabled').checked = this.checked;
             updateNextExportDate();
             if (this.checked) {
                 alert('Monthly auto-export enabled! The app will automatically download your data on the last day of each month.');
@@ -640,17 +643,24 @@
         function updateNextExportDate() {
             const autoExport = localStorage.getItem('autoExportEnabled') === 'true';
             const nextExportSpan = document.getElementById('nextExport');
+            const nextExportDateSpan = document.getElementById('next-export-date');
             
             if (autoExport) {
                 const today = new Date();
                 const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                nextExportSpan.textContent = lastDayOfMonth.toLocaleDateString();
+                const dateStr = lastDayOfMonth.toLocaleDateString();
+                
+                nextExportSpan.textContent = dateStr;
                 nextExportSpan.style.color = '#10b981';
                 nextExportSpan.style.fontWeight = '600';
+                
+                nextExportDateSpan.textContent = dateStr;
             } else {
                 nextExportSpan.textContent = 'Not scheduled';
                 nextExportSpan.style.color = '#666';
                 nextExportSpan.style.fontWeight = 'normal';
+                
+                nextExportDateSpan.textContent = 'Not scheduled';
             }
         }
 
@@ -675,9 +685,42 @@
                 // Perform auto-export
                 exportData(true);
                 localStorage.setItem('lastExportCheck', today.toISOString());
-                document.getElementById('lastExportCheck').textContent = today.toLocaleDateString();
+                const dateStr = today.toLocaleDateString();
+                document.getElementById('lastExportCheck').textContent = dateStr;
+                document.getElementById('last-export-date').textContent = dateStr;
             }
         }
+
+        // Modal functions
+        function showExportSettings() {
+            document.getElementById('export-settings-modal').style.display = 'block';
+            loadSettings();
+        }
+
+        function closeExportSettings() {
+            document.getElementById('export-settings-modal').style.display = 'none';
+        }
+
+        function saveExportSettings() {
+            const enabled = document.getElementById('auto-export-enabled').checked;
+            localStorage.setItem('autoExportEnabled', enabled);
+            document.getElementById('autoExportToggle').checked = enabled;
+            updateNextExportDate();
+            closeExportSettings();
+            
+            if (enabled) {
+                alert('✅ Monthly auto-export enabled! The app will prompt you to download your data on the last day of each month.');
+            } else {
+                alert('Auto-export disabled. You can still manually export anytime from the History tab.');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('export-settings-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeExportSettings();
+            }
+        });
 
         // Run auto-export check on page load
         window.addEventListener('load', function() {
@@ -720,11 +763,15 @@
                     minute: '2-digit'
                 });
 
-                alert('Creon entry saved successfully!');
+                alert('✅ Creon entry saved successfully!');
                 switchTab('history');
             } catch (error) {
                 console.error('Error saving entry:', error);
-                alert('Error saving entry. Please try again.');
+                if (error.name === 'QuotaExceededError') {
+                    alert('⚠️ Storage full! Please export and delete old entries to free up space.');
+                } else {
+                    alert('Error saving entry. Please try again.');
+                }
             }
         });
 
@@ -755,11 +802,15 @@
                 document.querySelectorAll('.stool-option-2').forEach(opt => opt.classList.remove('selected'));
                 selectedStool2 = null;
 
-                alert('Stool entry saved successfully!');
+                alert('✅ Stool entry saved successfully!');
                 switchTab('history');
             } catch (error) {
                 console.error('Error saving entry:', error);
-                alert('Error saving entry. Please try again.');
+                if (error.name === 'QuotaExceededError') {
+                    alert('⚠️ Storage full! Please export and delete old entries to free up space.');
+                } else {
+                    alert('Error saving entry. Please try again.');
+                }
             }
         });
 
@@ -928,7 +979,7 @@
                 if (isAutoExport) {
                     alert(`📅 Monthly Report Ready!\n\nYour ${monthYear} data has been automatically exported.\n\nCheck your Downloads folder for: ${filename}\n\nSee the Settings tab for instructions on securely sharing with your doctor.`);
                 } else {
-                    alert('Data exported! The file has been downloaded. Check the Settings tab for instructions on securely sharing with your doctor.');
+                    alert('✅ Data exported successfully!\n\nThe file has been downloaded. Check the Settings tab for instructions on securely sharing with your doctor.');
                 }
             } catch (error) {
                 console.error('Error exporting data:', error);
